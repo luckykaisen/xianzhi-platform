@@ -13,4 +13,6 @@ public interface IGoodsService {
     SearchResult<Goods> searchGoodsByFilter(GoodsFilter fromGoodsFilter);
 
     GoodsDetailResult getGoodsDetailById(Integer id);
+
+    void likeGoods(Integer id, Integer id1);
 }

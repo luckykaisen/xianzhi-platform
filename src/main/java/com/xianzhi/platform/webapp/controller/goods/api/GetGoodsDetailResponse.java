@@ -1,6 +1,7 @@
 package com.xianzhi.platform.webapp.controller.goods.api;
 
 import com.xianzhi.platform.webapp.common.rs.api.ServiceResponse;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,8 +11,9 @@ import lombok.Setter;
  */
 @Setter
 @Getter
+@AllArgsConstructor
 public class GetGoodsDetailResponse extends ServiceResponse {
 
-
+    private GoodsDetailVO detail;
 
 }

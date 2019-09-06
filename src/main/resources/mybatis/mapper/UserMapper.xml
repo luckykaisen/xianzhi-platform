@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xianzhi.platform.webapp.mapper.UserMapper">
+
+    <sql id="pagingLimit">
+        <include refid="com.xianzhi.platform.webapp.mapper.CommonDataMapper.pagingLimit"/>
+    </sql>
+
+    <sql id="userColumns">
+        tu.id AS user_id,
+        tu.mobile AS user_mobile,
+        tu.avatar_url AS user_avatar_url,
+        tu.name AS user_name,
+        tu.gender AS user_gender,
+        tu.last_login_time AS user_last_login_time,
+        tu.create_time AS user_create_time
+    </sql>
+
+    <sql id="toUserColumns">
+        ttu.id AS to_user_id,
+        ttu.mobile AS to_user_mobile,
+        ttu.avatar_url AS to_user_avatar_url,
+        ttu.name AS to_user_name,
+        ttu.gender AS to_user_gender,
+        ttu.last_login_time AS to_user_last_login_time,
+        ttu.create_time AS to_user_create_time
+    </sql>
+
+    <sql id="fromUserColumns">
+        tfu.id AS from_user_id,
+        tfu.mobile AS from_user_mobile,
+        tfu.avatar_url AS from_user_avatar_url,
+        tfu.name AS from_user_name,
+        tfu.gender AS from_user_gender,
+        tfu.last_login_time AS from_user_last_login_time,
+        tfu.create_time AS from_user_create_time
+    </sql>
+
+    <resultMap id="toUserResult" type="User">
+        <id property="id" column="to_user_id"/>
+        <result property="mobile" column="to_user_mobile"/>
+        <result property="avatarUrl" column="to_user_avatar_url"/>
+        <result property="name" column="to_user_name"/>
+        <result property="gender" column="to_user_gender"/>
+        <result property="lastLoginTime" column="to_user_last_login_time"/>
+        <result property="createTime" column="to_user_create_time"/>
+    </resultMap>
+
+    <resultMap id="fromUserResult" type="User">
+        <id property="id" column="from_user_id"/>
+        <result property="mobile" column="from_user_mobile"/>
+        <result property="avatarUrl" column="from_user_avatar_url"/>
+        <result property="name" column="from_user_name"/>
+        <result property="gender" column="from_user_gender"/>
+        <result property="lastLoginTime" column="from_user_last_login_time"/>
+        <result property="createTime" column="from_user_create_time"/>
+    </resultMap>
+
+    <resultMap id="userResult" type="User">
+        <id property="id" column="user_id"/>
+        <result property="mobile" column="user_mobile"/>
+        <result property="avatarUrl" column="user_avatar_url"/>
+        <result property="name" column="user_name"/>
+        <result property="gender" column="user_gender"/>
+        <result property="lastLoginTime" column="user_last_login_time"/>
+        <result property="createTime" column="user_create_time"/>
+    </resultMap>
+
+</mapper>

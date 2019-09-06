@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xianzhi.platform.webapp.mapper.GoodsMapper">
+
+    <sql id="pagingLimit">
+        <include refid="com.xianzhi.platform.webapp.mapper.CommonDataMapper.pagingLimit"/>
+    </sql>
+
+    <sql id="districtColumns">
+        <include refid="com.xianzhi.platform.webapp.mapper.CityMapper.districtColumns"/>
+    </sql>
+
+    <sql id="cityColumns">
+        <include refid="com.xianzhi.platform.webapp.mapper.CityMapper.cityColumns"/>
+    </sql>
+
+    <sql id="provinceColumns">
+        <include refid="com.xianzhi.platform.webapp.mapper.CityMapper.provinceColumns"/>
+    </sql>
+
+    <sql id="userColumns">
+        <include refid="com.xianzhi.platform.webapp.mapper.UserMapper.userColumns"/>
+    </sql>
+
+    <sql id="toUserColumns">
+        <include refid="com.xianzhi.platform.webapp.mapper.UserMapper.toUserColumns"/>
+    </sql>
+
+    <sql id="fromUserColumns">
+        <include refid="com.xianzhi.platform.webapp.mapper.UserMapper.fromUserColumns"/>
+    </sql>
+
+    <sql id="goodsCommentColumns">
+        tgc.id AS goods_comment_id,
+        tgc.content AS goods_comment_content,
+        tgc.create_time AS goods_comment_create_time,
+        tgc.is_hide AS goods_comment_is_hide,
+        tgc.goods_id AS goods_comment_goods_id,
+        tgc.from_user_id AS goods_comment_from_user_id,
+        tgc.to_user_id AS goods_comment_to_user_id
+    </sql>
+
+    <sql id="goodsColumns">
+        tg.id AS goods_id,
+        tg.name AS goods_name,
+        tg.cover_image AS goods_cover_image,
+        tg.address AS goods_address,
+        tg.price AS goods_price,
+        tg.description AS goods_description,
+        tg.images AS goods_images,
+        tg.is_delete AS goods_is_delete,
+        tg.view_count AS goods_view_count,
+        tg.like_count AS goods_like_count,
+        tg.create_time AS goods_create_time,
+        tg.update_time AS goods_update_time,
+        tg.user_id AS goods_user_id,
+        tg.category_id AS goods_category_id,
+        tg.district_id AS goods_district_id,
+        tg.status_id AS goods_status_id
+    </sql>
+
+    <sql id="userGoodsLikeColumns">
+        ugl.id AS user_goods_like_id,
+        ugl.create_time AS user_goods_like_create_time,
+        ugl.goods_id AS user_goods_like_goods_id,
+        ugl.user_id AS user_goods_like_user_id
+    </sql>
+
+    <resultMap id="districtResult"
+               type="District"
+               extends="com.xianzhi.platform.webapp.mapper.CityMapper.districtResult"/>
+
+    <resultMap id="toUserResult"
+               type="User"
+               extends="com.xianzhi.platform.webapp.mapper.UserMapper.toUserResult"/>
+
+    <resultMap id="fromUserResult"
+               type="User"
+               extends="com.xianzhi.platform.webapp.mapper.UserMapper.fromUserResult"/>
+
+    <resultMap id="userResult"
+               type="User"
+               extends="com.xianzhi.platform.webapp.mapper.UserMapper.userResult"/>
+
+    <resultMap id="goodsResult" type="Goods">
+        <id property="id" column="goods_id"/>
+        <result property="name" column="goods_name"/>
+        <result property="address" column="goods_address"/>
+        <result property="coverImage" column="goods_cover_image"/>
+        <result property="price" column="goods_price"/>
+        <result property="description" column="goods_description"/>
+        <result property="images" column="goods_images"/>
+        <result property="delete" column="goods_is_delete"/>
+        <result property="viewCount" column="goods_view_count"/>
+        <result property="likeCount" column="goods_like_count"/>
+        <result property="createTime" column="goods_create_time"/>
+        <result property="updateTime" column="goods_update_time"/>
+        <result property="userId" column="goods_user_id"/>
+        <result property="categoryId" column="goods_category_id"/>
+        <result property="districtId" column="goods_district_id"/>
+        <result property="statusId" column="goods_status_id"/>
+        <result property="category" column="goods_category_id" javaType="GoodsCategory" typeHandler="EnumIdTypeHandler"/>
+        <result property="status" column="goods_status_id" javaType="GoodsStatus" typeHandler="EnumIdTypeHandler"/>
+
+        <association property="district" javaType="District" resultMap="districtResult"/>
+        <association property="user" javaType="User" resultMap="userResult"/>
+    </resultMap>
+
+    <resultMap id="goodsCommentResult" type="GoodsComment">
+        <id property="id" column="goods_comment_id"/>
+        <result property="content" column="goods_comment_content"/>
+        <result property="createTime" column="goods_comment_create_time"/>
+        <result property="hide" column="goods_comment_is_hide"/>
+        <result property="goodsId" column="goods_comment_goods_id"/>
+        <result property="fromUserId" column="goods_comment_from_user_id"/>
+        <result property="toUserId" column="goods_comment_to_user_id"/>
+
+        <association property="toUser" javaType="User" resultMap="toUserResult"/>
+        <association property="fromUser" javaType="User" resultMap="fromUserResult"/>
+    </resultMap>
+
+    <resultMap id="userGoodsLikeResult" type="UserGoodsLike">
+        <id property="id" column="user_goods_like_id"/>
+        <result property="createTime" column="user_goods_like_create_time"/>
+        <result property="goodsId" column="user_goods_like_goods_id"/>
+        <result property="userId" column="user_goods_like_user_id"/>
+    </resultMap>
+
+    <sql id="goodsFilter">
+        <if test="filter.keywords != null">
+            AND (tg.name LIKE #{filter.keywords} OR tgc.name LIKE #{filter.keywords})
+        </if>
+    </sql>
+
+    <select id="selectGoodsByFilter" parameterType="map"
+            resultMap="goodsResult">
+        SELECT
+            <include refid="goodsColumns"/>,
+            <include refid="userColumns"/>,
+            <include refid="districtColumns"/>,
+            <include refid="cityColumns"/>,
+            <include refid="provinceColumns"/>
+        FROM
+            t_goods tg
+        INNER JOIN t_goods_category tgc ON tgc.id = tg.category_id
+        INNER JOIN t_district di ON di.id = tg.district_id
+        INNER JOIN t_city ci on ci.id = di.city_id
+        INNER JOIN t_province pr ON pr.id = ci.province_id
+        INNER JOIN t_user tu ON tu.id = tg.user_id
+        <where>
+            <include refid="goodsFilter"/>
+        </where>
+        ORDER BY tg.view_count
+        <include refid="pagingLimit"/>
+    </select>
+
+    <select id="countGoodsByFilter" parameterType="map"
+            resultType="int">
+        SELECT
+            COUNT(1)
+        FROM
+            t_goods tg
+        INNER JOIN t_goods_category tgc ON tgc.id = tg.category_id
+        INNER JOIN t_district di ON di.id = tg.district_id
+        INNER JOIN t_city ci on ci.id = di.city_id
+        INNER JOIN t_province pr ON pr.id = ci.province_id
+        INNER JOIN t_user tu ON tu.id = tg.user_id
+        <where>
+            <include refid="goodsFilter"/>
+        </where>
+    </select>
+
+    <select id="selectGoodsById" parameterType="int"
+            resultMap="goodsResult">
+        SELECT
+            <include refid="goodsColumns"/>,
+            <include refid="userColumns"/>,
+            <include refid="districtColumns"/>,
+            <include refid="cityColumns"/>,
+            <include refid="provinceColumns"/>
+        FROM
+            t_goods tg
+        INNER JOIN t_goods_category tgc ON tgc.id = tg.category_id
+        INNER JOIN t_district di ON di.id = tg.district_id
+        INNER JOIN t_city ci on ci.id = di.city_id
+        INNER JOIN t_province pr ON pr.id = ci.province_id
+        INNER JOIN t_user tu ON tu.id = tg.user_id
+        WHERE
+            tg.id = #{id}
+    </select>
+
+    <sql id="goodsCommentFilter">
+        <if test="filter.goodsId != null">
+            AND tgc.goods_id = #{filter.goodsId}
+        </if>
+    </sql>
+
+    <select id="selectGoodsCommentByFilter" parameterType="map"
+            resultMap="goodsCommentResult">
+        SELECT
+            <include refid="goodsCommentColumns"/>,
+            <include refid="toUserColumns"/>,
+            <include refid="fromUserColumns"/>
+        FROM
+            t_goods_comment tgc
+        INNER JOIN t_user tfu ON tfu.id = tgc.from_user_id
+        LEFT JOIN t_user ttu ON ttu.id = tgc.to_user_id
+        <where>
+            <include refid="goodsCommentFilter"/>
+        </where>
+        ORDER BY tgc.id ASC
+    </select>
+
+    <update id="accumulateGoodsViewCount" parameterType="map">
+        UPDATE `t_goods`
+            SET view_count = view_count + #{count}
+        WHERE
+            id = #{id}
+    </update>
+
+    <select id="selectUserGoodsLikeByUserIdAndGoodsId" parameterType="map"
+            resultMap="userGoodsLikeResult">
+        SELECT
+            <include refid="userGoodsLikeColumns"/>
+        FROM
+            t_user_goods_like ugl
+        WHERE
+            ugl.user_id = #{userId} AND ugl.goods_id = #{goodsId}
+    </select>
+
+    <insert id="insertUserGoodsLike" parameterType="map">
+        INSERT INTO `t_user_goods_like` (
+            `create_time`,
+            `goods_id`,
+            `user_id`
+        ) VALUES(
+            NOW(),
+            #{goodsId},
+            #{userId}
+        )
+    </insert>
+
+    <delete id="deleteUserGoodsLikeById" parameterType="map">
+        DELETE FROM t_user_goods_like WHERE id = #{id}
+    </delete>
+</mapper>

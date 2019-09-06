@@ -1,18 +1,15 @@
 package com.xianzhi.platform.webapp.controller.goods;
 
 import com.xianzhi.platform.webapp.common.filter.SearchResult;
+import com.xianzhi.platform.webapp.common.model.AccountCO;
 import com.xianzhi.platform.webapp.common.rs.api.ServiceResponse;
-import com.xianzhi.platform.webapp.controller.goods.api.GetGoodsDetailResponse;
-import com.xianzhi.platform.webapp.controller.goods.api.GetGoodsListRequest;
-import com.xianzhi.platform.webapp.controller.goods.api.GetGoodsListResponse;
-import com.xianzhi.platform.webapp.controller.goods.api.GoodsVO;
-import com.xianzhi.platform.webapp.data.filter.GoodsFilter;
+import com.xianzhi.platform.webapp.common.session.SessionContextAccessor;
+import com.xianzhi.platform.webapp.controller.goods.api.*;
 import com.xianzhi.platform.webapp.model.Goods;
 import com.xianzhi.platform.webapp.service.goods.api.GoodsDetailResult;
 import com.xianzhi.platform.webapp.service.goods.api.IGoodsService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -23,7 +20,7 @@ import java.util.List;
 @RequestMapping("/services/rs/goods")
 public class GoodsController {
 
-    @Autowired
+    @Resource
     private IGoodsService goodsService;
 
     @RequestMapping(value = "/list", method = RequestMethod.POST)
@@ -43,9 +40,18 @@ public class GoodsController {
     public ServiceResponse getGoodsDetail(@RequestParam("id") Integer id) {
 
         GoodsDetailResult result = goodsService.getGoodsDetailById(id);
+        GoodsDetailVO detail = GoodsDetailVO.fromDetail(result);
 
-        GetGoodsDetailResponse response = new GetGoodsDetailResponse();
-        return response;
+        return new GetGoodsDetailResponse(detail);
     }
 
+
+    @RequestMapping(value = "/like", method = RequestMethod.GET)
+    public ServiceResponse likeGoods(@RequestParam("id") Integer id) {
+
+        AccountCO account = SessionContextAccessor.getCurrentAccount();
+        goodsService.likeGoods(id, account.getId());
+
+        return new ServiceResponse();
+    }
 }

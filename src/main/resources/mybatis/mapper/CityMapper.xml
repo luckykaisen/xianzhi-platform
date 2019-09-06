@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xianzhi.platform.webapp.mapper.CityMapper">
+
+    <sql id="pagingLimit">
+        <include refid="com.xianzhi.platform.webapp.mapper.CommonDataMapper.pagingLimit"/>
+    </sql>
+
+    <sql id="provinceColumns">
+        pr.id AS province_id,
+        pr.name AS province_name
+    </sql>
+
+    <sql id="cityColumns">
+        ci.id AS city_id,
+        ci.name AS city_name,
+        ci.province_id AS city_province_id
+    </sql>
+
+    <sql id="districtColumns">
+        di.id AS district_id,
+        di.name AS district_name,
+        di.city_id AS district_city_id
+    </sql>
+
+    <resultMap id="provinceResult" type="Province">
+        <id property="id" column="province_id"/>
+        <result property="name" column="province_name"/>
+    </resultMap>
+
+    <resultMap id="cityResult" type="City">
+        <id property="id" column="city_id"/>
+        <result property="name" column="city_name"/>
+        <result property="provinceId" column="city_province_id"/>
+
+        <association property="province" javaType="Province" resultMap="provinceResult"/>
+    </resultMap>
+
+    <resultMap id="districtResult" type="District">
+        <id property="id" column="district_id"/>
+        <result property="name" column="district_name"/>
+        <result property="cityId" column="district_city_id"/>
+
+        <association property="city" javaType="City" resultMap="cityResult"/>
+    </resultMap>
+
+</mapper>

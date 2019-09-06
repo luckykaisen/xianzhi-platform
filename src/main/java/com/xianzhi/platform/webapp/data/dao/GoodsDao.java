@@ -5,6 +5,7 @@ import com.xianzhi.platform.webapp.data.filter.GoodsFilter;
 import com.xianzhi.platform.webapp.mapper.GoodsMapper;
 import com.xianzhi.platform.webapp.model.Goods;
 import com.xianzhi.platform.webapp.model.GoodsComment;
+import com.xianzhi.platform.webapp.model.UserGoodsLike;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -34,5 +35,21 @@ public class GoodsDao {
 
     public List<GoodsComment> selectGoodsCommentByFilter(GoodsCommentFilter filter) {
         return goodsMapper.selectGoodsCommentByFilter(filter);
+    }
+
+    public void accumulateGoodsViewCount(Integer id, int count) {
+        goodsMapper.accumulateGoodsViewCount(id, count);
+    }
+
+    public UserGoodsLike selectUserGoodsLikeByUserIdAndGoodsId(Integer userId, Integer id) {
+        return goodsMapper.selectUserGoodsLikeByUserIdAndGoodsId(userId, id);
+    }
+
+    public void insertUserGoodsLike(UserGoodsLike goodsLike) {
+        goodsMapper.insertUserGoodsLike(goodsLike);
+    }
+
+    public void deleteUserGoodsLikeById(Integer id) {
+        goodsMapper.deleteUserGoodsLikeById(id);
     }
 }

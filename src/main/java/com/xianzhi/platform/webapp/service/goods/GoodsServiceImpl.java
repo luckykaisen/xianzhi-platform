@@ -8,10 +8,12 @@ import com.xianzhi.platform.webapp.data.filter.GoodsCommentFilter;
 import com.xianzhi.platform.webapp.data.filter.GoodsFilter;
 import com.xianzhi.platform.webapp.model.Goods;
 import com.xianzhi.platform.webapp.model.GoodsComment;
+import com.xianzhi.platform.webapp.model.UserGoodsLike;
 import com.xianzhi.platform.webapp.service.goods.api.GoodsDetailResult;
 import com.xianzhi.platform.webapp.service.goods.api.IGoodsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -61,10 +63,30 @@ public class GoodsServiceImpl implements IGoodsService {
 
         List<GoodsComment> comments = goodsDao.selectGoodsCommentByFilter(commentFilter);
 
+        // 更新view_count
+        goodsDao.accumulateGoodsViewCount(id, 1);
+
         GoodsDetailResult result = new GoodsDetailResult();
         result.setComments(comments);
         result.setGoods(goods);
 
         return result;
+    }
+
+    @Override
+    public void likeGoods(Integer id, Integer userId) {
+
+        UserGoodsLike like = goodsDao.selectUserGoodsLikeByUserIdAndGoodsId(userId, id);
+
+        if (like == null) {
+
+            UserGoodsLike goodsLike = new UserGoodsLike();
+            goodsLike.setGoodsId(id);
+            goodsLike.setUserId(userId);
+
+            goodsDao.insertUserGoodsLike(goodsLike);
+        } else {
+            goodsDao.deleteUserGoodsLikeById(like.getId());
+        }
     }
 }

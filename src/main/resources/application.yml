@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/xianzhi_all?useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8
+    driver-class-name: com.mysql.cj.jdbc.NonRegisteringDriver
+    username: root
+    password: p@swrd123
+mybatis:
+  mapper-locations: classpath:mybatis/mapper/*.xml
+  type-aliases-package: com.xianzhi.platform.webapp.model
+  config-location: classpath:mybatis/mybatis-config.xml

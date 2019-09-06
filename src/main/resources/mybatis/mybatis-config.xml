@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+
+    <typeAliases>
+
+        <typeAlias alias="EnumIdTypeHandler" type="com.xianzhi.platform.webapp.common.mybatis.typehandler.EnumIdTypeHandler"/>
+        <typeAlias alias="Bool" type="com.xianzhi.platform.webapp.common.model.Bool"/>
+        <typeAlias alias="Goods" type="com.xianzhi.platform.webapp.model.Goods"/>
+        <typeAlias alias="City" type="com.xianzhi.platform.webapp.model.City"/>
+        <typeAlias alias="District" type="com.xianzhi.platform.webapp.model.District"/>
+        <typeAlias alias="GoodsCategory" type="com.xianzhi.platform.webapp.model.GoodsCategory"/>
+        <typeAlias alias="GoodsComment" type="com.xianzhi.platform.webapp.model.GoodsComment"/>
+        <typeAlias alias="GoodsStatus" type="com.xianzhi.platform.webapp.model.GoodsStatus"/>
+        <typeAlias alias="Province" type="com.xianzhi.platform.webapp.model.Province"/>
+        <typeAlias alias="User" type="com.xianzhi.platform.webapp.model.User"/>
+        <typeAlias alias="UserGoodsLike" type="com.xianzhi.platform.webapp.model.UserGoodsLike"/>
+        <typeAlias alias="UserWeixin" type="com.xianzhi.platform.webapp.model.UserWeixin"/>
+        <typeAlias alias="Gender" type="com.xianzhi.platform.webapp.model.Gender"/>
+
+    </typeAliases>
+</configuration>

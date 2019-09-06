@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.xianzhi.platform.webapp.common.model.AccountCO;
 import com.xianzhi.platform.webapp.common.session.HttpSessionContextUtility;
 import com.xianzhi.platform.webapp.common.session.SessionContextAccessor;
+import com.xianzhi.platform.webapp.common.session.SessionReplacedRequestHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -22,6 +23,7 @@ public class LoginHandlerInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+
         AccountCO currentAccount = SessionContextAccessor.getCurrentAccount();
         if (currentAccount == null || currentAccount.getId() == null) {
             response.setCharacterEncoding("UTF-8");
