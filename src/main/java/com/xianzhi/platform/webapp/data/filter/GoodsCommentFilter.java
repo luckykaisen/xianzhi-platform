@@ -15,4 +15,6 @@ public class GoodsCommentFilter extends SearchFilter {
 
     private Integer goodsId;
 
+    private Integer fromUserId;
+
 }

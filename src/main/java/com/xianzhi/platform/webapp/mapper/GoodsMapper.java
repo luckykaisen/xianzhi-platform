@@ -32,4 +32,10 @@ public interface GoodsMapper {
     void insertUserGoodsLike(UserGoodsLike goodsLike);
 
     void deleteUserGoodsLikeById(Integer id);
+
+    int countGoodsCommentByFilter(@Param("filter") GoodsCommentFilter filter);
+
+    void insertGoodsComment(GoodsComment comment);
+
+    void insertGoods(Goods goods);
 }

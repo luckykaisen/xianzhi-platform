@@ -52,4 +52,16 @@ public class GoodsDao {
     public void deleteUserGoodsLikeById(Integer id) {
         goodsMapper.deleteUserGoodsLikeById(id);
     }
+
+    public int countGoodsCommentByFilter(GoodsCommentFilter filter) {
+        return goodsMapper.countGoodsCommentByFilter(filter);
+    }
+
+    public void insertGoodsComment(GoodsComment comment) {
+        goodsMapper.insertGoodsComment(comment);
+    }
+
+    public void insertGoods(Goods goods) {
+        goodsMapper.insertGoods(goods);
+    }
 }

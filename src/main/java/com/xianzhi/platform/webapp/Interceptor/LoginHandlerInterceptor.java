@@ -32,7 +32,7 @@ public class LoginHandlerInterceptor implements HandlerInterceptor {
             try {
                 JSONObject res = new JSONObject();
 
-                res.put("result_code", 10096);
+                res.put("result_code", 90001);
                 res.put("result_message", "用户未登录！");
                 res.put("error_id", null);
                 out = response.getWriter();

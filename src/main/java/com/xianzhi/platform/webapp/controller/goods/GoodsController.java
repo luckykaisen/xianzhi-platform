@@ -6,6 +6,8 @@ import com.xianzhi.platform.webapp.common.rs.api.ServiceResponse;
 import com.xianzhi.platform.webapp.common.session.SessionContextAccessor;
 import com.xianzhi.platform.webapp.controller.goods.api.*;
 import com.xianzhi.platform.webapp.model.Goods;
+import com.xianzhi.platform.webapp.model.GoodsComment;
+import com.xianzhi.platform.webapp.model.UserGoodsLike;
 import com.xianzhi.platform.webapp.service.goods.api.GoodsDetailResult;
 import com.xianzhi.platform.webapp.service.goods.api.IGoodsService;
 import org.springframework.web.bind.annotation.*;
@@ -45,12 +47,27 @@ public class GoodsController {
         return new GetGoodsDetailResponse(detail);
     }
 
-
     @RequestMapping(value = "/like", method = RequestMethod.GET)
     public ServiceResponse likeGoods(@RequestParam("id") Integer id) {
 
         AccountCO account = SessionContextAccessor.getCurrentAccount();
         goodsService.likeGoods(id, account.getId());
+
+        return new ServiceResponse();
+    }
+
+    @RequestMapping(value = "/message/create", method = RequestMethod.POST)
+    public ServiceResponse createGoodsComment(@RequestBody CreateGoodsCommentRequest request) {
+
+        goodsService.addGoodsComment(request.fromComment());
+
+        return new ServiceResponse();
+    }
+
+    @RequestMapping(value = "/create", method = RequestMethod.POST)
+    public ServiceResponse createGoods(@RequestBody CreateGoodsRequest request) {
+
+        goodsService.addGoods(request.fromGoods());
 
         return new ServiceResponse();
     }

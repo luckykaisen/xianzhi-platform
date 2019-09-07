@@ -132,6 +132,17 @@
         <if test="filter.keywords != null">
             AND (tg.name LIKE #{filter.keywords} OR tgc.name LIKE #{filter.keywords})
         </if>
+        <if test="filter.userId != null">
+            AND tg.user_id = #{filter.userId}
+        </if>
+        <if test="filter.createTimeRange != null">
+            <if test="filter.createTimeRange.from != null">
+                AND tg.create_time <![CDATA[ >= ]]> #{filter.createTimeRange.from}
+            </if>
+            <if test="filter.createTimeRange.to != null">
+                AND tg.create_time <![CDATA[ < ]]> #{filter.createTimeRange.to}
+            </if>
+        </if>
     </sql>
 
     <select id="selectGoodsByFilter" parameterType="map"
@@ -195,6 +206,9 @@
         <if test="filter.goodsId != null">
             AND tgc.goods_id = #{filter.goodsId}
         </if>
+        <if test="filter.fromUserId != null">
+            AND tgc.from_user_id = #{filter.fromUserId}
+        </if>
     </sql>
 
     <select id="selectGoodsCommentByFilter" parameterType="map"
@@ -211,6 +225,19 @@
             <include refid="goodsCommentFilter"/>
         </where>
         ORDER BY tgc.id ASC
+    </select>
+
+    <select id="countGoodsCommentByFilter" parameterType="map"
+            resultType="int">
+        SELECT
+            COUNT(1)
+        FROM
+            t_goods_comment tgc
+        INNER JOIN t_user tfu ON tfu.id = tgc.from_user_id
+        LEFT JOIN t_user ttu ON ttu.id = tgc.to_user_id
+        <where>
+            <include refid="goodsCommentFilter"/>
+        </where>
     </select>
 
     <update id="accumulateGoodsViewCount" parameterType="map">
@@ -245,4 +272,58 @@
     <delete id="deleteUserGoodsLikeById" parameterType="map">
         DELETE FROM t_user_goods_like WHERE id = #{id}
     </delete>
+
+    <insert id="insertGoodsComment" parameterType="map">
+        INSERT INTO `t_goods_comment`(
+            `content`,
+            `create_time`,
+            `is_hide`,
+            `goods_id`,
+            `from_user_id`,
+            `to_user_id`
+        ) VALUES (
+            #{content},
+            NOW(),
+            'N',
+            #{goodsId},
+            #{fromUserId},
+            #{toUserId}
+        )
+    </insert>
+
+    <insert id="insertGoods" parameterType="map">
+        INSERT INTO `t_goods` (
+            `name`,
+            `cover_image`,
+            `address`,
+            `price`,
+            `description`,
+            `images`,
+            `is_delete`,
+            `view_count`,
+            `like_count`,
+            `create_time`,
+            `update_time`,
+            `user_id`,
+            `category_id`,
+            `district_id`,
+            `status_id`
+        ) VALUES (
+            #{name},
+            #{coverImage},
+            #{address},
+            #{price},
+            #{description},
+            #{images},
+            'N',
+            1,
+            0,
+            NOW(),
+            NOW(),
+            #{userId},
+            #{category.id},
+            #{districtId},
+            #{status.id}
+        )
+    </insert>
 </mapper>
